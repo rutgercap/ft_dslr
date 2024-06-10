@@ -1,4 +1,4 @@
 from src.describe import describe
 
-def test_can_run_describe() -> None:
+def test_cool() -> None:
     assert describe() == 42
