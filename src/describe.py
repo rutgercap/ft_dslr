@@ -47,7 +47,8 @@ def values_min(values: Sequence[Any]) -> float:
         return float("nan")
     min_value = float("inf")
     for value in filtered_values:
-        min_value = min(min_value, value)
+        if (value < min_value):
+            min_value = value
     return min_value
 
 
@@ -55,10 +56,11 @@ def values_max(values: Sequence[Any]) -> float:
     filtered_values = [value for value in values if not pd.isna(value)]
     if len(filtered_values) == 0:
         return float("nan")
-    min_value = float("-inf")
+    max_value = float("-inf")
     for value in filtered_values:
-        min_value = max(min_value, value)
-    return min_value
+        if (value > max_value):
+            max_value = value
+    return max_value
 
 def percentile(values: Sequence[Any], percentage: int) -> float:
     filtered_values = [value for value in values if not pd.isna(value)]
