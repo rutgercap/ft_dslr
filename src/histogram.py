@@ -16,11 +16,8 @@ def draw_histogram(dataframe: pd.DataFrame):
     columns = dataframe.columns.to_list()
     for items in ['Index', 'Hogwarts House', 'First Name', 'Last Name', 'Birthday','Best Hand']:
         columns.remove(items)
-    # print(len(columns))
-
 
     figure, axis = plt.subplots(4, 4)
-
     plt.subplots_adjust(hspace=0.5)
 
     for i, subject in enumerate(columns):
