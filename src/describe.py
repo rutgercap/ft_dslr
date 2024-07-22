@@ -83,7 +83,6 @@ def percentile(values: Sequence[Any], percentage: int) -> float:
 
 
 def describe(dataframe: pd.DataFrame) -> int:
-    print(dataframe.describe())
     table = PrettyTable()
     table.field_names = ["", *dataframe.columns]
     table.add_row(
