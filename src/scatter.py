@@ -44,14 +44,6 @@ def draw_scatter(df: pd.DataFrame):
         for y_subject in subjects:
             if y_subject == x_subject:
                 continue
-            if i == 0:
-                df.plot.scatter(
-                    x=x_subject,
-                    y=y_subject,
-                    s=5,
-                    color=color_list,
-                    ax=axis[floor(i / 4), i % 4],
-                )
             df.plot.scatter(
                 x=x_subject,
                 y=y_subject,
