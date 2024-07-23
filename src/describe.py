@@ -1,7 +1,8 @@
 import sys
 from typing import Any, Sequence
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 from prettytable import PrettyTable
 
 
@@ -47,7 +48,7 @@ def values_min(values: Sequence[Any]) -> float:
         return float("nan")
     min_value = float("inf")
     for value in filtered_values:
-        if (value < min_value):
+        if value < min_value:
             min_value = value
     return min_value
 
@@ -58,9 +59,10 @@ def values_max(values: Sequence[Any]) -> float:
         return float("nan")
     max_value = float("-inf")
     for value in filtered_values:
-        if (value > max_value):
+        if value > max_value:
             max_value = value
     return max_value
+
 
 def percentile(values: Sequence[Any], percentage: int) -> float:
     filtered_values = [value for value in values if not pd.isna(value)]
@@ -82,7 +84,7 @@ def percentile(values: Sequence[Any], percentage: int) -> float:
     )
 
 
-def describe(dataframe: pd.DataFrame) -> int:
+def describe(dataframe: pd.DataFrame):
     table = PrettyTable()
     table.field_names = ["", *dataframe.columns]
     table.add_row(
