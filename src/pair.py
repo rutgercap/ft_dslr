@@ -1,11 +1,9 @@
 import sys
-from math import floor
 
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 import pandas as pd
-from pandas.plotting import scatter_matrix
 import seaborn as sns
 
 
@@ -18,10 +16,19 @@ def read_file(path_to_training_data: str) -> pd.DataFrame:
         exit(1)
     return df
 
-def ft_pair(subjects:list[str], df: pd.DataFrame, color_list: list[str], color_dict: dict[str,str]):
+
+def ft_pair(
+    subjects: list[str],
+    df: pd.DataFrame,
+):
+    houses = ["Hufflepuff", "Gryffindor", "Ravenclaw", "Slytherin"]
+    colors = ["orange", "red", "blue", "green"]
+    color_dict = {house: color for house, color in zip(houses, colors)}
+    color_list = [color_dict[house] for house in df["Hogwarts House"]]
+
     figure, axis = plt.subplots(13, 13)
-    plt.subplots_adjust(hspace=0.5, left=0, right=1,top=0.9, bottom=0)
-    figure.suptitle(f"Pair plot")
+    plt.subplots_adjust(hspace=0.5, left=0, right=1, top=0.9, bottom=0)
+    figure.suptitle("Pair plot")
     for x, x_subject in enumerate(subjects):
         for y, y_subject in enumerate(subjects):
             if y_subject == x_subject:
@@ -32,7 +39,7 @@ def ft_pair(subjects:list[str], df: pd.DataFrame, color_list: list[str], color_d
                 s=5,
                 color=color_list,
                 ax=axis[x, y],
-                alpha=0.5
+                alpha=0.5,
             )
 
     legend_handles = [
@@ -44,6 +51,7 @@ def ft_pair(subjects:list[str], df: pd.DataFrame, color_list: list[str], color_d
     figure.legend(handles=legend_handles, loc="upper left")
     plt.show()
 
+
 def draw_pair(df: pd.DataFrame):
     subjects = df.columns.to_list()
     for items in [
@@ -54,19 +62,15 @@ def draw_pair(df: pd.DataFrame):
         "Best Hand",
     ]:
         subjects.remove(items)
-    houses = ["Hufflepuff", "Gryffindor", "Ravenclaw", "Slytherin"]
-    colors = ["orange", "red", "blue", "green"]
-    color_dict = {house: color for house, color in zip(houses, colors)}
-    color_list = [color_dict[house] for house in df["Hogwarts House"]]
-    
+
     df = df.filter(items=subjects)
     numeric_df = df.select_dtypes(include=[np.number])
     numeric_df = (numeric_df - numeric_df.mean()) / numeric_df.std()
 
     sns.pairplot(df, hue="Hogwarts House", height=3)
-    
     plt.show()
-    # ft_pair(subjects, df, color_list, color_dict)
+
+    # ft_pair(subjects, df)
 
 
 def main():
