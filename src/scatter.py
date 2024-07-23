@@ -1,7 +1,7 @@
 import sys
-from itertools import combinations
 from math import floor
 
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 import pandas as pd
@@ -28,40 +28,45 @@ def draw_scatter(df: pd.DataFrame):
         "Best Hand",
     ]:
         subjects.remove(items)
-    colors = [
-        "#ff355e",
-        "#fd5b78",
-        "#ff6037",
-        "#ff9966",
-        "#ff9933",
-        "#ffcc33",
-        "#ffff66",
-        "#ccff00",
-        "#66ff66",
-        "#aaf0d1",
-        "#16d0cb",
-        "#50bfe6",
-        "#9c27b0",
-    ]
-
-    color_dict = {subject: color for subject, color in zip(subjects, colors)}
+    houses = ["Hufflepuff", "Gryffindor", "Ravenclaw", "Slytherin"]
+    colors = ["orange", "red", "blue", "green"]
+    color_dict = {house: color for house, color in zip(houses, colors)}
+    color_list = [color_dict[house] for house in df["Hogwarts House"]]
 
     df = df.select_dtypes(include=[np.number])
     df = (df - df.mean()) / df.std()
 
-    figure, axis = plt.subplots(4, 4)
-
-    # for x_subject in subjects:
-    # axis[floor(i/4), i%4].set_title(f'Compare with {x_subject}')
-    x_subject = "Flying"
-    for i, y_subject in enumerate(subjects):
-        print(x_subject, y_subject)
-        # print(color_dict[y_subject])
-        if y_subject == x_subject:
-            continue
-        if i == 0:
-            ax = df.plot.scatter(x=x_subject, y=y_subject, color=color_dict[y_subject])
-        df.plot.scatter(x=x_subject, y=y_subject, color=color_dict[y_subject], ax=ax)
+    for x_subject in subjects:
+        figure, axis = plt.subplots(3, 4)
+        figure.suptitle(f"Compare with {x_subject}")
+        plt.subplots_adjust(hspace=0.5)
+        i = 0
+        for y_subject in subjects:
+            if y_subject == x_subject:
+                continue
+            if i == 0:
+                df.plot.scatter(
+                    x=x_subject,
+                    y=y_subject,
+                    s=5,
+                    color=color_list,
+                    ax=axis[floor(i / 4), i % 4],
+                )
+            df.plot.scatter(
+                x=x_subject,
+                y=y_subject,
+                s=5,
+                color=color_list,
+                ax=axis[floor(i / 4), i % 4],
+            )
+            i += 1
+        legend_handles = [
+            mpatches.Patch(color=color_dict["Hufflepuff"], label="Hufflepuff"),
+            mpatches.Patch(color=color_dict["Gryffindor"], label="Gryffindor"),
+            mpatches.Patch(color=color_dict["Ravenclaw"], label="Ravenclaw"),
+            mpatches.Patch(color=color_dict["Slytherin"], label="Slytherin"),
+        ]
+        figure.legend(handles=legend_handles, loc="upper left")
 
     plt.show()
 
