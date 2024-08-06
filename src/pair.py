@@ -76,7 +76,7 @@ def draw_pair(df: pd.DataFrame):
 def main():
     args = sys.argv[1:]
     if len(args) != 1:
-        print("Usage: python describe.py <path/to/dataset.csv>")
+        print("Usage: python pair.py <path/to/dataset.csv>")
         exit(1)
     path_to_dataset = args[0]
     if not path_to_dataset.endswith(".csv"):
