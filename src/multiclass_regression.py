@@ -25,7 +25,7 @@ class MultiClassRegression:
         ]
 
     def load_weights(self, weights: ndarray, biases: ndarray) -> "MultiClassRegression":
-        for i in enumerate(self.regressions):
+        for i in range(len(self.regressions)):
             self.regressions[i].load_weights(weights[i], biases[i])
         return self
 

@@ -23,14 +23,10 @@ def get_X_and_Y(path_to_dataset: str) -> tuple[np.ndarray, np.ndarray]:
         columns=["Index", "First Name", "Last Name", "Birthday", "Best Hand"],
         inplace=True,
     )
-
     X = df.drop(columns=["Hogwarts House"])
-
     X = (X - X.mean()) / X.std()
     Y = df["Hogwarts House"]
-
-    x, y = X.to_numpy(), Y.to_numpy()
-    return x, y
+    return X.to_numpy(), Y.to_numpy()
 
 
 def binary_vector(y: np.ndarray, correct_house: str) -> np.ndarray:
