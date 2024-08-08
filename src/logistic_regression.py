@@ -1,7 +1,8 @@
+from pathlib import Path
 from typing import Sequence
 
 import numpy as np
-from numpy import ndarray
+from numpy import array, ndarray
 
 
 def sigmoid(x):
@@ -19,10 +20,16 @@ class LogisticRegression:
         self.weights = None
         self.bias = None
 
+    def load_weights(self, weights: ndarray, bias: ndarray) -> "LogisticRegression":
+        self.weights = weights
+        self.bias = bias
+        return self
+    
+
     def fit(self, X: ndarray, y: ndarray, silent=False):
         n_samples, n_features = X.shape
         self.weights = np.zeros(n_features)
-        self.bias = 0
+        self.bias = 0.
 
         for _ in range(self.epochs):
             linear_pred = np.dot(X, self.weights) + self.bias
@@ -45,3 +52,11 @@ class LogisticRegression:
     def probabilities(self, X: ndarray) -> Sequence[float]:
         linear_pred = np.dot(X, self.weights) + self.bias
         return linear_pred
+    
+    def get_weights(self) -> list:
+        return list(self.weights)
+
+    def get_bias(self) -> list:
+        return float(self.bias)
+
+    

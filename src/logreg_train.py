@@ -16,25 +16,18 @@ def read_file(path_to_training_data: str) -> pd.DataFrame:
     return df
 
 
-def get_df(path_to_dataset: str):
+def get_X_and_Y(path_to_dataset: str) -> tuple[np.ndarray, np.ndarray]:
     df = read_file(path_to_dataset)
     df.dropna(inplace=True)
     df.drop(
         columns=["Index", "First Name", "Last Name", "Birthday", "Best Hand"],
         inplace=True,
     )
-    return df
 
-
-def get_X_and_Y(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
     X = df.drop(columns=["Hogwarts House"])
 
     X = (X - X.mean()) / X.std()
     Y = df["Hogwarts House"]
-
-    # delete it later!
-    # X.drop(X.index[5:], inplace=True)
-    # Y.drop(Y.index[5:], inplace=True)
 
     x, y = X.to_numpy(), Y.to_numpy()
     return x, y
@@ -61,15 +54,11 @@ def main():
     if not path_to_dataset.endswith(".csv"):
         print("Invalid file format. Only CSV files are supported.")
         exit(1)
-    df_train = get_df(path_to_dataset)
-    X_train, y = get_X_and_Y(df_train)
+    X_train, y = get_X_and_Y(path_to_dataset)
 
     multi = MultiClassRegression(4)
     multi.train(X_train, house_name_to_index(y), silent=True)
-    houses = ["Hufflepuff", "Gryffindor", "Ravenclaw", "Slytherin"]
-
-    result = multi.predict(np.array(X_train), houses)
-    print(result)
+    multi.save_weights("weights.json")
 
 
 if __name__ == "__main__":
