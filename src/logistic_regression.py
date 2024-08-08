@@ -1,6 +1,8 @@
 from typing import Sequence
-from numpy import ndarray
+
 import numpy as np
+from numpy import ndarray
+
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
@@ -34,13 +36,12 @@ class LogisticRegression:
             self.weights = self.weights - self.learning_rate * dw
             self.bias = self.bias - self.learning_rate * db
 
-    def predict(self, X: ndarray) -> Sequence[int]:  
+    def predict(self, X: ndarray) -> Sequence[int]:
         linear_pred = np.dot(X, self.weights) + self.bias
         y_pred = sigmoid(linear_pred)
         class_pred = [0 if y <= 0.5 else 1 for y in y_pred]
         return class_pred
-    
+
     def probabilities(self, X: ndarray) -> Sequence[float]:
         linear_pred = np.dot(X, self.weights) + self.bias
         return linear_pred
-
