@@ -1,7 +1,8 @@
 import sys
-from logistic_regression import LogisticRegression
 import numpy as np
 import pandas as pd
+
+from multiclass_regression import MultiClassRegression
 
 
 def read_file(path_to_training_data: str) -> pd.DataFrame:
@@ -31,8 +32,8 @@ def get_X_and_Y(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
     Y = df["Hogwarts House"]
 
     # delete it later!
-    X.drop(X.index[5:], inplace=True)
-    Y.drop(Y.index[5:], inplace=True)
+    # X.drop(X.index[5:], inplace=True)
+    # Y.drop(Y.index[5:], inplace=True)
 
     x, y = X.to_numpy(), Y.to_numpy()
     return x, y
@@ -43,10 +44,16 @@ def binary_vector(y: np.ndarray, correct_house: str) -> np.ndarray:
     return np.array(result)
 
 
+def house_name_to_index(y:np.ndarray):
+    houses = ["Hufflepuff", "Gryffindor", "Ravenclaw", "Slytherin"]
+    mapping = {value: idx for idx, value in enumerate(houses)}
+    index_array = np.array([mapping[house] for house in y])
+    return (index_array)
+
 def main():
     args = sys.argv[1:]
     if len(args) != 1:
-        print("Usage: python logreg_train.py <path/to/dataset.csv>")
+        print("Usage: python logreg_train.py <path/to/train_dataset.csv>")
         exit(1)
     path_to_dataset = args[0]
     if not path_to_dataset.endswith(".csv"):
@@ -55,10 +62,13 @@ def main():
     df_train = get_df(path_to_dataset)
     X_train, y = get_X_and_Y(df_train)
 
-    y_Ravenclaw = binary_vector(y, "Ravenclaw")
-    clf = LogisticRegression(learning_rate=0.01)
-    clf.fit(X_train, y_Ravenclaw)
-    return 0
+    multi = MultiClassRegression(4)
+    multi.train(X_train, house_name_to_index(y), silent=True)
+    houses = ["Hufflepuff", "Gryffindor", "Ravenclaw", "Slytherin"]
+    
+    result = multi.predict(np.array(X_train), houses)
+    print(result)
+    print(y)
 
 if __name__ == "__main__":
     main()

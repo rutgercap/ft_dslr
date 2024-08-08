@@ -17,7 +17,7 @@ class LogisticRegression:
         self.weights = None
         self.bias = None
 
-    def fit(self, X: ndarray, y: ndarray):
+    def fit(self, X: ndarray, y: ndarray, silent=False):
         n_samples, n_features = X.shape
         self.weights = np.zeros(n_features)
         self.bias = 0
@@ -26,16 +26,21 @@ class LogisticRegression:
             linear_pred = np.dot(X, self.weights) + self.bias
             predictions = sigmoid(linear_pred)
             loss = np.mean(prediction_loss(predictions, y))
-            print("loss:", loss)
+            if not silent:
+                print("loss:", loss)
             dw = (1 / n_samples) * np.dot(X.T, (predictions - y))
             db = (1 / n_samples) * np.sum(predictions - y)
 
             self.weights = self.weights - self.learning_rate * dw
             self.bias = self.bias - self.learning_rate * db
 
-    def predict(self, X) -> Sequence[int]:  
+    def predict(self, X: ndarray) -> Sequence[int]:  
         linear_pred = np.dot(X, self.weights) + self.bias
         y_pred = sigmoid(linear_pred)
         class_pred = [0 if y <= 0.5 else 1 for y in y_pred]
         return class_pred
+    
+    def probabilities(self, X: ndarray) -> Sequence[float]:
+        linear_pred = np.dot(X, self.weights) + self.bias
+        return linear_pred
 
