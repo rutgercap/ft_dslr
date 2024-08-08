@@ -1,4 +1,5 @@
 import sys
+
 import numpy as np
 import pandas as pd
 
@@ -44,11 +45,12 @@ def binary_vector(y: np.ndarray, correct_house: str) -> np.ndarray:
     return np.array(result)
 
 
-def house_name_to_index(y:np.ndarray):
+def house_name_to_index(y: np.ndarray):
     houses = ["Hufflepuff", "Gryffindor", "Ravenclaw", "Slytherin"]
     mapping = {value: idx for idx, value in enumerate(houses)}
     index_array = np.array([mapping[house] for house in y])
-    return (index_array)
+    return index_array
+
 
 def main():
     args = sys.argv[1:]
@@ -65,10 +67,10 @@ def main():
     multi = MultiClassRegression(4)
     multi.train(X_train, house_name_to_index(y), silent=True)
     houses = ["Hufflepuff", "Gryffindor", "Ravenclaw", "Slytherin"]
-    
+
     result = multi.predict(np.array(X_train), houses)
     print(result)
-    print(y)
+
 
 if __name__ == "__main__":
     main()
