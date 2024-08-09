@@ -1,7 +1,7 @@
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import Optional, Sequence
-from datetime import datetime
 
 import numpy as np
 from numpy import array, ndarray
@@ -53,7 +53,9 @@ class MultiClassRegression:
         if not silent:
             end = datetime.now()
             training_time = end - now
-            print(f"Training completed in {training_time.total_seconds():.4f} seconds. Loss: {average_loss}")
+            print(
+                f"Training completed in {training_time.total_seconds():.4f} seconds. Loss: {average_loss}"
+            )
         return average_loss
 
     def softmax_to_class(self, softmax: ndarray, classes: Sequence[str]) -> ndarray:
