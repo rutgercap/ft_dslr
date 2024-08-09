@@ -53,6 +53,5 @@ class MultiClassRegression:
         weights = [
             {"weights": x.get_weights(), "bias": x.get_bias()} for x in self.regressions
         ]
-        print(weights)
         with open(path, "w+") as file:
             json.dump(weights, file)
