@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from typing import Optional, Sequence
+from datetime import datetime
 
 import numpy as np
 from numpy import array, ndarray
@@ -32,17 +33,28 @@ class MultiClassRegression:
         learning_rate=0.001,
         silent=False,
         batch_size: Optional[int] = None,
-    ):
+    ) -> float:
+        losses = []
+        now = datetime.now()
+        if not silent:
+            print("Starting training...")
         for i, regression in enumerate(self.regressions):
             y_each_house = binary_vector_index(y, i)
-            regression.fit(
+            loss = regression.fit(
                 X,
                 y_each_house,
-                silent=silent,
+                silent=True,
                 epochs=epochs,
                 learning_rate=learning_rate,
                 batch_size=batch_size,
             )
+            losses.append(loss)
+        average_loss = np.mean(losses)
+        if not silent:
+            end = datetime.now()
+            training_time = end - now
+            print(f"Training completed in {training_time.total_seconds():.4f} seconds. Loss: {average_loss}")
+        return average_loss
 
     def softmax_to_class(self, softmax: ndarray, classes: Sequence[str]) -> ndarray:
         result_in_classes = []

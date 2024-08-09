@@ -28,7 +28,7 @@ class LogisticRegression:
         y: ndarray,
         learning_rate=0.001,
         silent=False,
-    ):
+    ) -> float:
         shape = X.shape
         linear_pred = np.dot(X, self.weights) + self.bias
         predictions = sigmoid(linear_pred)
@@ -40,6 +40,7 @@ class LogisticRegression:
 
         self.weights = self.weights - learning_rate * dw
         self.bias = self.bias - learning_rate * db
+        return loss
 
     def fit(
         self,
@@ -49,17 +50,18 @@ class LogisticRegression:
         learning_rate=0.001,
         silent=False,
         batch_size: Optional[int] = None,
-    ):
+    ) -> float:
         samples, n_features = X.shape
         self.weights = np.zeros(n_features)
         self.bias = 0.0
-
+        loss = 0
         for _ in range(epochs):
             if batch_size is None:
-                self.gradient_descent(X, y, learning_rate, silent)
+                loss = self.gradient_descent(X, y, learning_rate, silent)
                 continue
             indices = np.random.randint(0, samples, size=batch_size)
-            self.gradient_descent(X[indices], y[indices], learning_rate, silent)
+            loss = self.gradient_descent(X[indices], y[indices], learning_rate, silent)
+        return loss
 
     def predict(self, X: ndarray) -> Sequence[int]:
         linear_pred = np.dot(X, self.weights) + self.bias
