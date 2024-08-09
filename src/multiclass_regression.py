@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Sequence
+from typing import Optional, Sequence
 
 import numpy as np
 from numpy import array, ndarray
@@ -25,7 +25,13 @@ class MultiClassRegression:
         return self
 
     def train(
-        self, X: ndarray, y: ndarray, epochs=1000, learning_rate=0.001, silent=False
+        self,
+        X: ndarray,
+        y: ndarray,
+        epochs=1000,
+        learning_rate=0.001,
+        silent=False,
+        batch_size: Optional[int] = None,
     ):
         for i, regression in enumerate(self.regressions):
             y_each_house = binary_vector_index(y, i)
@@ -35,6 +41,7 @@ class MultiClassRegression:
                 silent=silent,
                 epochs=epochs,
                 learning_rate=learning_rate,
+                batch_size=batch_size,
             )
 
     def softmax_to_class(self, softmax: ndarray, classes: Sequence[str]) -> ndarray:
