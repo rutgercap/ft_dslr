@@ -4,3 +4,5 @@ __pycache__/
 .DS_Store
 datasets/
 venv/
+houses.csv
+weights.json

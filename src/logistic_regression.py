@@ -1,4 +1,3 @@
-from pathlib import Path
 from typing import Sequence
 
 import numpy as np
@@ -14,9 +13,7 @@ def prediction_loss(y_pred: ndarray, y: ndarray):
 
 
 class LogisticRegression:
-    def __init__(self, learning_rate=0.001, epochs=1000):
-        self.learning_rate = learning_rate
-        self.epochs = epochs
+    def __init__(self):
         self.weights = None
         self.bias = None
 
@@ -24,14 +21,15 @@ class LogisticRegression:
         self.weights = weights
         self.bias = bias
         return self
-    
 
-    def fit(self, X: ndarray, y: ndarray, silent=False):
+    def fit(
+        self, X: ndarray, y: ndarray, epochs=1000, learning_rate=0.001, silent=False
+    ):
         n_samples, n_features = X.shape
         self.weights = np.zeros(n_features)
-        self.bias = 0.
+        self.bias = 0.0
 
-        for _ in range(self.epochs):
+        for _ in range(epochs):
             linear_pred = np.dot(X, self.weights) + self.bias
             predictions = sigmoid(linear_pred)
             loss = np.mean(prediction_loss(predictions, y))
@@ -40,8 +38,8 @@ class LogisticRegression:
             dw = (1 / n_samples) * np.dot(X.T, (predictions - y))
             db = (1 / n_samples) * np.sum(predictions - y)
 
-            self.weights = self.weights - self.learning_rate * dw
-            self.bias = self.bias - self.learning_rate * db
+            self.weights = self.weights - learning_rate * dw
+            self.bias = self.bias - learning_rate * db
 
     def predict(self, X: ndarray) -> Sequence[int]:
         linear_pred = np.dot(X, self.weights) + self.bias
@@ -52,11 +50,9 @@ class LogisticRegression:
     def probabilities(self, X: ndarray) -> Sequence[float]:
         linear_pred = np.dot(X, self.weights) + self.bias
         return linear_pred
-    
+
     def get_weights(self) -> list:
         return list(self.weights)
 
     def get_bias(self) -> list:
         return float(self.bias)
-
-    

@@ -53,7 +53,7 @@ def main():
     X_train, y = get_X_and_Y(path_to_dataset)
 
     multi = MultiClassRegression(4)
-    multi.train(X_train, house_name_to_index(y), silent=True)
+    multi.train(X_train, house_name_to_index(y), silent=False)
     multi.save_weights("weights.json")
 
 

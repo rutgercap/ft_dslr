@@ -1,9 +1,11 @@
-import sys
-import pandas as pd
-import numpy as np
 import json
+import sys
+
+import numpy as np
+import pandas as pd
 
 from multiclass_regression import MultiClassRegression
+
 
 def read_file(path_to_training_data: str) -> pd.DataFrame:
     try:
@@ -13,6 +15,7 @@ def read_file(path_to_training_data: str) -> pd.DataFrame:
         print("File not found")
         exit(1)
     return df
+
 
 def get_X_test(path_to_dataset: str) -> np.ndarray:
     df = read_file(path_to_dataset)
@@ -25,17 +28,21 @@ def get_X_test(path_to_dataset: str) -> np.ndarray:
     X = (X - X.mean()) / X.std()
     return X.to_numpy()
 
+
 def get_weights(path: str) -> np.ndarray:
     f = open(path)
     data = json.load(f)
-    weights = np.array([item['weights'] for item in data])
-    biases = np.array([item['bias'] for item in data])
+    weights = np.array([item["weights"] for item in data])
+    biases = np.array([item["bias"] for item in data])
     return weights, biases
+
 
 def main():
     args = sys.argv[1:]
     if len(args) != 2:
-        print("Usage: python logreg_predict.py <weights.numpy> <path/to/dataset_test.csv> ")
+        print(
+            "Usage: python logreg_predict.py <weights.numpy> <path/to/dataset_test.csv> "
+        )
         exit(1)
     path_to_weight = args[0]
     path_to_dataset = args[1]
@@ -51,7 +58,14 @@ def main():
 
     indices = np.arange(len(result))
     data = np.column_stack((indices, result))
-    np.savetxt('houses.csv', data, fmt='%s', delimiter=',', header='Index,Hogwarts House', comments='')
+    np.savetxt(
+        "houses.csv",
+        data,
+        fmt="%s",
+        delimiter=",",
+        header="Index,Hogwarts House",
+        comments="",
+    )
 
 
 if __name__ == "__main__":
