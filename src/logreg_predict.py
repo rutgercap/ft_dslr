@@ -19,12 +19,12 @@ def read_file(path_to_training_data: str) -> pd.DataFrame:
 
 def get_X_test(path_to_dataset: str) -> np.ndarray:
     df = read_file(path_to_dataset)
-    df.dropna(inplace=True)
     df.drop(
         columns=["Index", "First Name", "Last Name", "Birthday", "Best Hand"],
         inplace=True,
     )
     X = df.drop(columns=["Hogwarts House"])
+    X.dropna(inplace=True)
     X = (X - X.mean()) / X.std()
     return X.to_numpy()
 
@@ -41,7 +41,7 @@ def main():
     args = sys.argv[1:]
     if len(args) != 2:
         print(
-            "Usage: python logreg_predict.py <weights.numpy> <path/to/dataset_test.csv> "
+            "Usage: python logreg_predict.py <weights.json> <path/to/dataset_test.csv> "
         )
         exit(1)
     path_to_weight = args[0]
@@ -55,7 +55,6 @@ def main():
     multi = MultiClassRegression(4).load_weights(weights, biases)
     houses = ["Hufflepuff", "Gryffindor", "Ravenclaw", "Slytherin"]
     result = multi.predict(np.array(X_test), houses)
-
     indices = np.arange(len(result))
     data = np.column_stack((indices, result))
     np.savetxt(
