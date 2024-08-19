@@ -24,7 +24,7 @@ def get_X_test(path_to_dataset: str) -> np.ndarray:
         inplace=True,
     )
     X = df.drop(columns=["Hogwarts House"])
-    X.dropna(inplace=True)
+    X = X.fillna(X.mean())
     X = (X - X.mean()) / X.std()
     return X.to_numpy()
 
