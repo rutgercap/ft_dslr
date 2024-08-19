@@ -18,12 +18,12 @@ def read_file(path_to_training_data: str) -> pd.DataFrame:
 
 def get_X_and_Y(path_to_dataset: str) -> tuple[np.ndarray, np.ndarray]:
     df = read_file(path_to_dataset)
-    df = df.fillna(df.mean())
     df.drop(
         columns=["Index", "First Name", "Last Name", "Birthday", "Best Hand"],
         inplace=True,
     )
     X = df.drop(columns=["Hogwarts House"])
+    X = X.fillna(X.mean())
     X = (X - X.mean()) / X.std()
     Y = df["Hogwarts House"]
     return X.to_numpy(), Y.to_numpy()
